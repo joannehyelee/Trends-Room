@@ -86,7 +86,11 @@ $.ajax({
     
     for (var i=0; i<10; i++) {
         console.log(json._embedded.events[i].name);
-        $("#container2").append(json._embedded.events[i].name + "; playing on " + json._embedded.events[i].dates.start.localDate + "<br>")
+        $("#container2").append(json._embedded.events[i].name
+         + "; playing on " + json._embedded.events[i].dates.start.localDate
+          + "; playing at venue " + json._embedded.events[i]._embedded.venues[0].name
+           + "; longitude: " + json._embedded.events[i]._embedded.venues[0].location.longitude
+            + "; latitude: " + json._embedded.events[i]._embedded.venues[0].location.latitude + "<br>")
     }
 
     // for (var i=0; i<10; i++) {
@@ -103,6 +107,30 @@ $.ajax({
     }
 });
 
+
+
+//music events, in LA area "classificationName=music&dmaId=324"
+var query3 = "https://app.ticketmaster.com/discovery/v2/events.json?classificationName=music&dmaId=324&apikey=f5oUWGdzD2xIKTd5rGEGxwy0moJZvoWg"
+//            
+  
+$.ajax({
+  type:"GET",
+  url:query3,
+  async:true,
+  dataType: "json",
+  success: function(json) {
+    
+        console.log('test', json);
+        
+
+  
+
+
+  },
+    error: function(xhr, status, err) {
+        console.log(err);
+    }
+});
 
 
 
