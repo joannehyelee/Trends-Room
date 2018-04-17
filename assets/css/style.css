@@ -4,16 +4,26 @@
     box-sizing: border-box;
 }
 
-html {
+html, body {
     color: #4b4b4b;
-    font-family: 'Poppins', 'Arial', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.5px;
     font-size: 16px;
     font-weight: 400;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.abril {
+    font-family: 'Abril Fatface', cursive;
+    letter-spacing: 1.5px;
+    font-size: 1.3em;
 }
 
 .container, .form-row{
     max-width: 100%;
     padding: 0;
+    min-width: 1024px;
 }
 
 [class^="col"] {
