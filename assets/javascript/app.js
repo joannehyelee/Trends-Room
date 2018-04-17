@@ -138,6 +138,7 @@ $(document).ready(function(){
     ////////// Function city /////////////////
         function dropDownCity() {
             event.preventDefault();
+            $('#TM-City-Select').prepend("<option>Please Choose One</option>");
     
             // Firebase watcher + initial loader + order/limit HINT: .on("child_added"
             database.ref('-LA4CrA1ByvodmmTtkRQ').orderByValue().limitToLast(300).on("child_added", function(snapshot) {
@@ -173,7 +174,7 @@ $(document).ready(function(){
     
                 //empty the dropdown menu
                 $('#SubCat').empty();
-                $('#SubCat').prepend("<option>please choose one</option>");
+                $('#SubCat').prepend("<option>Please Choose One</option>");
     
                 //set the variable for category
                 var catSelect = $('#Cat').val();
