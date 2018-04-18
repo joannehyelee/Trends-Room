@@ -129,6 +129,7 @@ $(document).ready(function(){
         storageBucket: "trendroomproject.appspot.com",
         messagingSenderId: "800339938200"
     };
+    
     firebase.initializeApp(config);
         
     // Create a variable to reference the database.
@@ -138,6 +139,7 @@ $(document).ready(function(){
     ////////// Function city /////////////////
         function dropDownCity() {
             event.preventDefault();
+            $('#TM-City-Select').prepend("<option>Please Choose One</option>");
     
             // Firebase watcher + initial loader + order/limit HINT: .on("child_added"
             database.ref('-LA4CrA1ByvodmmTtkRQ').orderByValue().limitToLast(300).on("child_added", function(snapshot) {
@@ -173,7 +175,7 @@ $(document).ready(function(){
     
                 //empty the dropdown menu
                 $('#SubCat').empty();
-                $('#SubCat').prepend("<option>please choose one</option>");
+                $('#SubCat').prepend("<option>Please Choose One</option>");
     
                 //set the variable for category
                 var catSelect = $('#Cat').val();
@@ -241,7 +243,7 @@ $(document).ready(function(){
             var location = "&dmaId=" + userSelectCity;
     
             var queryBuild = baseURL + classNum + location + key;
-    //var query3 = baseURL + "classificationName=sports&dmaId=324&apikey=f5oUWGdzD2xIKTd5rGEGxwy0moJZvoWg"
+    
     console.log("the Query Build is-------: " + queryBuild);
                         $.ajax({
                             type:"GET",
@@ -250,22 +252,24 @@ $(document).ready(function(){
                             dataType: "json",
                             success: function(json) {
                             
-    console.log(json);  
-                            ticketMasterRespondObjects =[];
+console.log(json);  
+                            ticketMasterRespondObjects = [];
                             for (var i=0; i<20; i++) {
+console.log("entered for loop");
                                 var responseObject = {
-                                    playingAtVenue = json._embedded.events[i]._embedded.venues[0].name,
-                                    latitude = json._embedded.events[i]._embedded.venues[0].location.longitude,
-                                    longitude = json._embedded.events[i]._embedded.venues[0].location.longitude,
-                                    segment = json._embedded.events[i].classifications[0].segment.name,
-                                    genre = json._embedded.events[i].classifications[0].genre.name,
-                                    date = json._embedded.events[i].dates.start.localDate,
-                                    name = json._embedded.events[i].name,
-                                    image = json._embedded.events["i"].images["0"].url
+                                    playingAtVenue: json._embedded.events[i]._embedded.venues[0].name,
+                                    latitude : json._embedded.events[i]._embedded.venues[0].location.longitude,
+                                    longitude : json._embedded.events[i]._embedded.venues[0].location.longitude,
+                                    segment: json._embedded.events[i].classifications[0].segment.name,
+                                    genre: json._embedded.events[i].classifications[0].genre.name,
+                                    date: json._embedded.events[i].dates.start.localDate,
+                                    name: json._embedded.events[i].name,
+                                    image: json._embedded.events[i].images[0].url
                                 };
-    
+console.log("ticket master objects: " +  responseObject);    
                                 ticketMasterRespondObjects.push(responseObject);
                             }
+console.log("ticket master objects: " +  ticketMasterRespondObjects);
                             },
                             error: function(xhr, status, err) {
                                 console.log(err);
