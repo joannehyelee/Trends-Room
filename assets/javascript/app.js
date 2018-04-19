@@ -83,7 +83,7 @@ function initMap() {
                 );
             }
             console.log(this.ourAppId);
-            window.location.hash = this.ourAppId;
+            scrollToCard(this.ourAppId);
         });
     });
 };
@@ -201,7 +201,21 @@ function createCards() {
     };
 }
 
+function scrollToCard(id) {
+    var $container = $('#events'),
+        $scrollTo = $(id);
 
+        console.log("entered function");
+
+    $container.scrollTop(
+        $scrollTo.offset().top - $container.offset().top + $container.scrollTop()
+    );
+
+    // Or you can animate the scrolling:
+    $container.animate({
+        scrollTop: $scrollTo.offset().top - $container.offset().top + $container.scrollTop()
+    });
+}
 
 
 ////////////////////////////////////////////////
