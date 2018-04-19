@@ -4,25 +4,15 @@
 
 var locationObjects = [];
 var center = { lat: 34.0522, lng: -118.2437 };
-var testincr = 0;
 var ticketMasterRespondObjects = [];
 var cityForCenter = "";
 
 /////////////////////////////////////////////////
 ////////////  Master Function
 ////////////////////////////////////////////////
-
+0
 function onCreation() {
     $("document").ready(function () {
-
-        $("#map").on("click", function(){
-        
-            //PUT ACTION HERE
-            markerTest();
-            console.log(locationObjects);
-            initMap();
-    });
-
         // Initialize Firebase
         var config = {
             apiKey: "AIzaSyDgBiTT1tZkPzoAwQORSah0mfdrgq5vht0",
@@ -58,39 +48,42 @@ onCreation();
 /// initialize the map, recreates map with markers based off of location objects, and center 
 ///
 function initMap() {
-    console.log("Entered Init map");
 
-    console.log("---------------------------------------------------");
-    console.log( "center on init map");
-    console.log(center);
-    console.log("---------------------------------------------------");
+    var incr = 0;
 
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 8,
         center: center
     });
 
-    //console.log("Location obj list: ")
-    console.log(locationObjects);
-
     locationObjects.forEach(location => {
         var latitude = location.latitude;
         var longitude = location.longitude;
-        console.log("LOCATION OBJECT CALL: " + latitude + " , " + longitude);
+        var eventId = "#tmEvent" + incr;
+        incr++;
 
         var marker = new google.maps.Marker({
             position: { lat: latitude, lng: longitude },
             map: map,
             draggable: true,
             animation: google.maps.Animation.DROP,
+            ourAppId: eventId,
         });
+
         marker.addListener('click', function () {
-            //console.log("clicked");
             if (marker.getAnimation() !== null) {
                 marker.setAnimation(null);
             } else {
                 marker.setAnimation(google.maps.Animation.BOUNCE);
+                window.setTimeout(
+                    function () {
+                        marker.setAnimation(null);
+                    },
+                    1300
+                );
             }
+            console.log(this.ourAppId);
+            window.location.hash = this.ourAppId;
         });
     });
 };
@@ -111,7 +104,7 @@ function makeLocationObject(lat, long) {
 async function setCenterAndMapEvents() {
 
     console.log("---------------------------------------------------");
-    console.log( "Entered Set Center");
+    console.log("Entered Set Center");
     console.log("---------------------------------------------------");
 
     var apicall = "https://maps.googleapis.com/maps/api/geocode/json?address=" + cityForCenter + "&key=AIzaSyD7S0i7eNHqNekovmb6LjPjaKMd-t2XMJ0";
@@ -134,14 +127,14 @@ async function setCenterAndMapEvents() {
             clongitude = json.results[0].geometry.location.lng;
 
             console.log("---------------------------------------------------");
-            console.log( "center before setting it");
+            console.log("center before setting it");
             console.log(center);
             console.log("---------------------------------------------------");
 
             center = { lat: clatitude, lng: clongitude };
 
             console.log("---------------------------------------------------");
-            console.log( "center After setting it");
+            console.log("center After setting it");
             console.log(center);
             console.log("---------------------------------------------------");
             //console.log(center);
@@ -150,28 +143,6 @@ async function setCenterAndMapEvents() {
             //console.log(err);
         }
     }).then(mapTicketMasterEvents);
-}
-
-
-// Test function Can trash after implement correct. 
-function markerTest() {
-    var lat = 34.0522;
-    var long = -118.2437;
-
-
-    // clear locatioOBjects for new search
-    locationObjects = [];
-
-    var testr = makeLocationObject(-97, -97);
-    locationObjects.push(testr);
-
-    // make location objects -> add to global variable location Objects. 
-    for (var i = 0; i < .24; i += .06) {
-        var location = makeLocationObject(lat - testincr, long - i);
-        locationObjects.push(location);
-    }
-    testincr += .1;
-    //console.log("button pushed");
 }
 
 function mapTicketMasterEvents() {
@@ -197,16 +168,44 @@ function mapTicketMasterEvents() {
 }
 
 ////////////////////////////////////////////////
-/////////// Click Events
+/////////// Card Functions
 ////////////////////////////////////////////////
 
+function createCards() {
+    $("#events").html("");
 
+    for (var i = 0; i < ticketMasterRespondObjects.length; i++) {
+        var ticketlink = ticketMasterRespondObjects[i].ticketPurchase;
+
+        var thehtml = `
+                 <div class="card" id="tmEvent${i}">
+                 <div class="card-header">
+                     <h6>${ticketMasterRespondObjects[i].name}</h6>
+                     <p>${ticketMasterRespondObjects[i].playingAtVenue}</p>
+                 </div>
+                 <div class="card-body">
+                     <div class="col-7">
+                         <img src="${ticketMasterRespondObjects[i].image}" width="100%">
+                     </div>
+                     <div class="col-4">
+                         <p>${ticketMasterRespondObjects[i].date}</p>
+                         <p>${ticketMasterRespondObjects[i].genre} ${ticketMasterRespondObjects[i].segment}</p>
+                         <a href="${ticketlink}" target="_blank" class="btn btn-primary btn-sm">See Ticket</a>
+                         </div>
+                 </div>
+                 </div>
+                 `
+        console.log("ticketsxxxxx :" + ticketMasterRespondObjects[i].ticketPurchase);
+        // appends each after
+        $("#events").append(thehtml)
+    };
+}
 
 
 
 
 ////////////////////////////////////////////////
-//////////// TicketMaster Functions
+//////////// Menu Buttons
 ////////////////////////////////////////////////
 
 
@@ -253,7 +252,7 @@ function dropDownCat(database) {
         //set the variable for category
         var catSelect = $('#Cat').val();
         console.log("the selected Category is: " + catSelect);
-        
+
         //construct the variable for connecting to the DB
         var dataSelect = '-LA90S7jRzghy4mvqy86/' + catSelect;
         ////console.log("The database referance is: " + dataSelect);
@@ -293,7 +292,7 @@ function generateQuery() {
 
         var cityoption = $("[value=" + userSelectCity + "]");
         cityForCenter = cityoption.html();
-        console.log( "city to use for center: " + cityForCenter);
+        console.log("city to use for center: " + cityForCenter);
 
         //detect the category selection and display the content for the subcategory
         $('#Cat').on('change', { passive: true }, function (event) {
@@ -335,13 +334,14 @@ function generateQuery() {
 
                             var responseObject = {
                                 playingAtVenue: json._embedded.events[i]._embedded.venues[0].name,
-                                latitude: json._embedded.events[i]._embedded.venues[0].location.longitude,
+                                latitude: json._embedded.events[i]._embedded.venues[0].location.latitude,
                                 longitude: json._embedded.events[i]._embedded.venues[0].location.longitude,
                                 segment: json._embedded.events[i].classifications[0].segment.name,
                                 genre: json._embedded.events[i].classifications[0].genre.name,
                                 date: json._embedded.events[i].dates.start.localDate,
                                 name: json._embedded.events[i].name,
-                                image: json._embedded.events[i].images[0].url
+                                image: json._embedded.events[i].images[0].url,
+                                ticketPurchase: json._embedded.events[i].url
                             };
 
                             console.log("ticket master objects: ");
@@ -350,6 +350,7 @@ function generateQuery() {
                             ticketMasterRespondObjects.push(responseObject);
                         }
                         //console.log("ticket master objects: " + ticketMasterRespondObjects);
+                        createCards();
                         setCenterAndMapEvents();
                     },
                     error: function (xhr, status, err) {
