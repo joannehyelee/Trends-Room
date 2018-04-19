@@ -215,6 +215,12 @@ function scrollToCard(id) {
     $container.animate({
         scrollTop: $scrollTo.offset().top - $container.offset().top + $container.scrollTop()
     });
+
+    $scrollTo.addClass('animated pulse').one(animationEnd, function() {
+        $(this).removeClass('animated pulse');
+  
+        if (typeof callback === 'function') callback();
+      });
 }
 
 
