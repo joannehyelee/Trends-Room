@@ -59,7 +59,7 @@ function initMap() {
     locationObjects.forEach(location => {
         var latitude = location.latitude;
         var longitude = location.longitude;
-        var eventId = "#tmEvent" + incr + "";
+        var eventId = "#tmEvent" + incr;
         incr++;
 
         var marker = new google.maps.Marker({
@@ -76,11 +76,11 @@ function initMap() {
             } else {
                 marker.setAnimation(google.maps.Animation.BOUNCE);
                 window.setTimeout(
-                    function() {
-                        marker.setAnimation(null); 
+                    function () {
+                        marker.setAnimation(null);
                     },
                     1300
-                ); 
+                );
             }
             console.log(this.ourAppId);
             window.location.hash = this.ourAppId;
@@ -104,7 +104,7 @@ function makeLocationObject(lat, long) {
 async function setCenterAndMapEvents() {
 
     console.log("---------------------------------------------------");
-    console.log( "Entered Set Center");
+    console.log("Entered Set Center");
     console.log("---------------------------------------------------");
 
     var apicall = "https://maps.googleapis.com/maps/api/geocode/json?address=" + cityForCenter + "&key=AIzaSyD7S0i7eNHqNekovmb6LjPjaKMd-t2XMJ0";
@@ -127,14 +127,14 @@ async function setCenterAndMapEvents() {
             clongitude = json.results[0].geometry.location.lng;
 
             console.log("---------------------------------------------------");
-            console.log( "center before setting it");
+            console.log("center before setting it");
             console.log(center);
             console.log("---------------------------------------------------");
 
             center = { lat: clatitude, lng: clongitude };
 
             console.log("---------------------------------------------------");
-            console.log( "center After setting it");
+            console.log("center After setting it");
             console.log(center);
             console.log("---------------------------------------------------");
             //console.log(center);
@@ -168,16 +168,44 @@ function mapTicketMasterEvents() {
 }
 
 ////////////////////////////////////////////////
-/////////// Click Events
+/////////// Card Functions
 ////////////////////////////////////////////////
 
+function createCards() {
+    $("#events").html("");
 
+    for (var i = 0; i < ticketMasterRespondObjects.length; i++) {
+        var ticketlink = ticketMasterRespondObjects[i].ticketPurchase;
+
+        var thehtml = `
+                 <div class="card" id="tmEvent${i}">
+                 <div class="card-header">
+                     <h6>${ticketMasterRespondObjects[i].name}</h6>
+                     <p>${ticketMasterRespondObjects[i].playingAtVenue}</p>
+                 </div>
+                 <div class="card-body">
+                     <div class="col-7">
+                         <img src="${ticketMasterRespondObjects[i].image}" width="100%">
+                     </div>
+                     <div class="col-4">
+                         <p>${ticketMasterRespondObjects[i].date}</p>
+                         <p>${ticketMasterRespondObjects[i].genre} ${ticketMasterRespondObjects[i].segment}</p>
+                         <a href="${ticketlink}" target="_blank" class="btn btn-primary btn-sm">See Ticket</a>
+                         </div>
+                 </div>
+                 </div>
+                 `
+        console.log("ticketsxxxxx :" + ticketMasterRespondObjects[i].ticketPurchase);
+        // appends each after
+        $("#events").append(thehtml)
+    };
+}
 
 
 
 
 ////////////////////////////////////////////////
-//////////// TicketMaster Functions
+//////////// Menu Buttons
 ////////////////////////////////////////////////
 
 
@@ -224,7 +252,7 @@ function dropDownCat(database) {
         //set the variable for category
         var catSelect = $('#Cat').val();
         console.log("the selected Category is: " + catSelect);
-        
+
         //construct the variable for connecting to the DB
         var dataSelect = '-LA90S7jRzghy4mvqy86/' + catSelect;
         ////console.log("The database referance is: " + dataSelect);
@@ -264,7 +292,7 @@ function generateQuery() {
 
         var cityoption = $("[value=" + userSelectCity + "]");
         cityForCenter = cityoption.html();
-        console.log( "city to use for center: " + cityForCenter);
+        console.log("city to use for center: " + cityForCenter);
 
         //detect the category selection and display the content for the subcategory
         $('#Cat').on('change', { passive: true }, function (event) {
@@ -312,7 +340,8 @@ function generateQuery() {
                                 genre: json._embedded.events[i].classifications[0].genre.name,
                                 date: json._embedded.events[i].dates.start.localDate,
                                 name: json._embedded.events[i].name,
-                                image: json._embedded.events[i].images[0].url
+                                image: json._embedded.events[i].images[0].url,
+                                ticketPurchase: json._embedded.events[i].url
                             };
 
                             console.log("ticket master objects: ");
@@ -321,6 +350,7 @@ function generateQuery() {
                             ticketMasterRespondObjects.push(responseObject);
                         }
                         //console.log("ticket master objects: " + ticketMasterRespondObjects);
+                        createCards();
                         setCenterAndMapEvents();
                     },
                     error: function (xhr, status, err) {
