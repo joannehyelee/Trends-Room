@@ -4,25 +4,15 @@
 
 var locationObjects = [];
 var center = { lat: 34.0522, lng: -118.2437 };
-var testincr = 0;
 var ticketMasterRespondObjects = [];
 var cityForCenter = "";
 
 /////////////////////////////////////////////////
 ////////////  Master Function
 ////////////////////////////////////////////////
-
+0
 function onCreation() {
     $("document").ready(function () {
-
-        $("#map").on("click", function(){
-        
-            //PUT ACTION HERE
-            markerTest();
-            console.log(locationObjects);
-            initMap();
-    });
-
         // Initialize Firebase
         var config = {
             apiKey: "AIzaSyDgBiTT1tZkPzoAwQORSah0mfdrgq5vht0",
@@ -84,12 +74,24 @@ function initMap() {
             draggable: true,
             animation: google.maps.Animation.DROP,
         });
+
+        console.log("---------------------------------------------------");
+        console.log(map);
+        console.log(marker.map);
+        console.log("---------------------------------------------------");
+
         marker.addListener('click', function () {
             //console.log("clicked");
             if (marker.getAnimation() !== null) {
                 marker.setAnimation(null);
             } else {
                 marker.setAnimation(google.maps.Animation.BOUNCE);
+                window.setTimeout(
+                    function() {
+                        marker.setAnimation(null); 
+                    },
+                    1300
+                ); 
             }
         });
     });
@@ -150,28 +152,6 @@ async function setCenterAndMapEvents() {
             //console.log(err);
         }
     }).then(mapTicketMasterEvents);
-}
-
-
-// Test function Can trash after implement correct. 
-function markerTest() {
-    var lat = 34.0522;
-    var long = -118.2437;
-
-
-    // clear locatioOBjects for new search
-    locationObjects = [];
-
-    var testr = makeLocationObject(-97, -97);
-    locationObjects.push(testr);
-
-    // make location objects -> add to global variable location Objects. 
-    for (var i = 0; i < .24; i += .06) {
-        var location = makeLocationObject(lat - testincr, long - i);
-        locationObjects.push(location);
-    }
-    testincr += .1;
-    //console.log("button pushed");
 }
 
 function mapTicketMasterEvents() {
@@ -335,7 +315,7 @@ function generateQuery() {
 
                             var responseObject = {
                                 playingAtVenue: json._embedded.events[i]._embedded.venues[0].name,
-                                latitude: json._embedded.events[i]._embedded.venues[0].location.longitude,
+                                latitude: json._embedded.events[i]._embedded.venues[0].location.latitude,
                                 longitude: json._embedded.events[i]._embedded.venues[0].location.longitude,
                                 segment: json._embedded.events[i].classifications[0].segment.name,
                                 genre: json._embedded.events[i].classifications[0].genre.name,
