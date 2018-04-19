@@ -307,6 +307,11 @@ function generateQuery() {
 
     //get and register the user selection for the city
     $('#TM-City-Select').on('change', { passive: true }, function (event) {
+        
+        //empty the dropdown menu
+        $('#Cat').val('null');
+        $('#SubCat').empty();
+        
         userSelectCity = $('#TM-City-Select').val();
         console.log("The City code is : " + userSelectCity);
 
