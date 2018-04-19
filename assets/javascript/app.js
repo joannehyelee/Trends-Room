@@ -48,40 +48,29 @@ onCreation();
 /// initialize the map, recreates map with markers based off of location objects, and center 
 ///
 function initMap() {
-    console.log("Entered Init map");
 
-    console.log("---------------------------------------------------");
-    console.log( "center on init map");
-    console.log(center);
-    console.log("---------------------------------------------------");
+    var incr = 0;
 
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 8,
         center: center
     });
 
-    //console.log("Location obj list: ")
-    console.log(locationObjects);
-
     locationObjects.forEach(location => {
         var latitude = location.latitude;
         var longitude = location.longitude;
-        console.log("LOCATION OBJECT CALL: " + latitude + " , " + longitude);
+        var eventId = "#tmEvent" + incr + "";
+        incr++;
 
         var marker = new google.maps.Marker({
             position: { lat: latitude, lng: longitude },
             map: map,
             draggable: true,
             animation: google.maps.Animation.DROP,
+            ourAppId: eventId,
         });
 
-        console.log("---------------------------------------------------");
-        console.log(map);
-        console.log(marker.map);
-        console.log("---------------------------------------------------");
-
         marker.addListener('click', function () {
-            //console.log("clicked");
             if (marker.getAnimation() !== null) {
                 marker.setAnimation(null);
             } else {
@@ -93,6 +82,8 @@ function initMap() {
                     1300
                 ); 
             }
+            console.log(this.ourAppId);
+            window.location.hash = this.ourAppId;
         });
     });
 };
