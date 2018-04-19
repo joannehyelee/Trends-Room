@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta charset="UTF-8">
@@ -7,13 +8,23 @@
 
 	<title>TRENDSROOM</title>
 
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<!-- Bootstrap CSS 
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	 crossorigin="anonymous">
+
 
 	<link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Roboto" rel="stylesheet">
-	
+
 	<link rel="stylesheet" href="assets/css/style.css">
+	<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<script src="https://code.jquery.com/jquery.js"></script>
 </head>
+
 <body>
 	<header class="navbar navbar-light justify-content-center">
 		<a class="abril">TRENDSROOM</a>
@@ -25,19 +36,24 @@
 				<form>
 					<div class="form-row">
 						<div class="col-md-2">
-							<input type="text" class="form-control" id="" placeholder="Location">
+							<!-- the location selection -->
+							<select name="city" id="TM-City-Select" class="cityside custom-select custom-select-lg mb-3"></select>
 						</div>
 						<div class="col-md-2">
-							<select class="form-control">
-								<option selected>Category</option>
-								<option>...</option>
+							<!-- Category selection -->
+							<select name="Category" id="Cat" class="cityside custom-select custom-select-lg mb-3">
+								<option value="null">Select</option>
+								<option value="Music">Music</option>
+								<option value="Arts &amp; Theatre">Art and Theatre</option>
+								<option value="Event Style">Event Style</option>
+								<option value="Film">Film</option>
+								<option value="Sports">Sports</option>
+								<option value="Venue Based">Venue Based</option>
 							</select>
 						</div>
 						<div class="col-md-2">
-							<select class="form-control">
-								<option selected>Sub Category</option>
-								<option>...</option>
-							</select>
+							<!-- sub category selection -->
+							<select name="SubCategory" id="SubCat" class="cityside custom-select custom-select-lg mb-3"></select>
 						</div>
 						<div class="col-md-2" style="margin-left: auto;">
 							<input type="text" class="form-control" id="" placeholder="Search">
@@ -105,14 +121,17 @@
 		</div>
 	</main>
 
-	<!-- jQuery -->
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-	<!-- Bootstrap JS -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
 
 	<script src="assets/javascript/app.js"></script>
-	<script async defer
-	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7S0i7eNHqNekovmb6LjPjaKMd-t2XMJ0&callback=initMap">
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7S0i7eNHqNekovmb6LjPjaKMd-t2XMJ0&callback=initMap">
 	</script>
+
+
+
+
+
 </body>
+
 </html>
