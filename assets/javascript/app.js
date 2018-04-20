@@ -83,7 +83,7 @@ function initMap() {
                 );
             }
             console.log(this.ourAppId);
-            window.location.hash = this.ourAppId;
+            scrollToCard(this.ourAppId);
         });
     });
 };
@@ -187,7 +187,7 @@ function createCards() {
                      <div class="col-7">
                          <img src="${ticketMasterRespondObjects[i].image}" width="100%">
                      </div>
-                     <div class="col-4">
+                     <div class="col-5">
                          <p>${ticketMasterRespondObjects[i].date}</p>
                          <p>${ticketMasterRespondObjects[i].genre} ${ticketMasterRespondObjects[i].segment}</p>
                          <a href="${ticketlink}" target="_blank" class="btn btn-primary btn-sm">See Ticket</a>
@@ -201,7 +201,27 @@ function createCards() {
     };
 }
 
+function scrollToCard(id) {
+    var $container = $('#events'),
+        $scrollTo = $(id);
 
+        console.log("entered function");
+
+    $container.scrollTop(
+        $scrollTo.offset().top - $container.offset().top + $container.scrollTop()
+    );
+
+    // Or you can animate the scrolling:
+    $container.animate({
+        scrollTop: $scrollTo.offset().top - $container.offset().top + $container.scrollTop()
+    });
+
+    $scrollTo.addClass('animated pulse bg-focus').one(animationEnd, function() {
+        $(this).removeClass('animated pulse bg-focus');
+  
+        if (typeof callback === 'function') callback();
+    });
+}
 
 
 ////////////////////////////////////////////////
@@ -214,7 +234,7 @@ function createCards() {
 ///
 function dropDownCity(database) {
     event.preventDefault();
-    $('#TM-City-Select').prepend("<option>Please Choose One</option>");
+    $('#TM-City-Select').prepend("<option>Please Choose Location</option>");
 
     // Firebase watcher + initial loader + order/limit HINT: .on("child_added"
     database.ref('-LA4CrA1ByvodmmTtkRQ').orderByValue().limitToLast(300).on("child_added", function (snapshot) {
